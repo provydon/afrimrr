@@ -42,6 +42,11 @@ else
         echo "ERROR: Migration failed. Check that your database is reachable from this container (port 3306 for MySQL, 5432 for PostgreSQL) and that DB_USERNAME has access to DB_DATABASE."
         exit 1
     }
+    # One-time demo seed (fictional startups) when SEED_DEMO=true. Idempotent.
+    if [ "${SEED_DEMO:-false}" = "true" ]; then
+        echo "Seeding demo data..."
+        php artisan db:seed --class=DemoSeeder --force || true
+    fi
     php artisan config:clear
     php artisan cache:clear
     php artisan config:cache
