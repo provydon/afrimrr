@@ -50,11 +50,14 @@ services:
     repo: https://github.com/provydon/afrimrr
     branch: main
     region: frankfurt
-    plan: free
+    plan: starter
     dockerfilePath: ./docker/Dockerfile
     dockerContext: .
     healthCheckPath: /up
     autoDeploy: true
+    domains:
+      - africanmrr.com
+      - www.africanmrr.com
     envVars:
       - key: DEPLOYMENT_TYPE
         value: web
