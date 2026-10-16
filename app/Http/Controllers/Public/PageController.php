@@ -32,4 +32,11 @@ class PageController extends Controller
     {
         return Inertia::render('public/BadgeStore');
     }
+
+    public function developers(): Response
+    {
+        return Inertia::render('public/Developers', [
+            'baseUrl' => rtrim((string) config('app.url'), '/'),
+        ]);
+    }
 }

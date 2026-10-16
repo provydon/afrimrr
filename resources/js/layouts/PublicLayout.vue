@@ -127,7 +127,7 @@ const isActive = (href: string) => current.value === href || current.value.start
                         <div class="space-y-2">
                             <p class="font-semibold">Product</p>
                             <Link href="/badge-store" class="block text-muted-foreground hover:text-foreground">Badges</Link>
-                            <a href="/api/startups" class="block text-muted-foreground hover:text-foreground">API</a>
+                            <Link href="/developers" class="block text-muted-foreground hover:text-foreground">API &amp; MCP</Link>
                             <Link href="/faq" class="block text-muted-foreground hover:text-foreground">FAQ</Link>
                         </div>
                         <div class="space-y-2">

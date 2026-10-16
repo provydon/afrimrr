@@ -1,0 +1,22 @@
+# AfriMRR
+
+> Verified monthly recurring revenue (MRR) for African startups. Founders connect Paystack, Flutterwave or Stripe; AfriMRR reads active subscriptions directly from the provider, normalizes every plan interval and currency to a monthly USD figure, and publishes a tamper-proof verified number. No screenshots, no self-reported vanity metrics.
+
+## Pages
+- [Leaderboard](https://africanmrr.com/leaderboard): Top 100 African startups ranked by verified MRR, with month-over-month growth.
+- [Startups](https://africanmrr.com/startups): Searchable, filterable directory of startups (by category and country).
+- [Marketplace](https://africanmrr.com/marketplace): Startups listed for sale with revenue multiples backed by verified MRR.
+- [Developers](https://africanmrr.com/developers): Public API and MCP server documentation.
+
+## API (public, JSON, no auth)
+- `GET /api/startups` — List verified startups. Query params: `verified` (bool), `category`, `per_page` (max 100).
+- `GET /api/startups/{slug}` — A single startup's full profile, including MRR history.
+- `GET /api/leaderboard` — Top startups by verified MRR (param: `limit`, max 100).
+
+## MCP (Model Context Protocol)
+- Streamable HTTP endpoint: `https://africanmrr.com/mcp`
+- Tools: `search_startups`, `get_startup`, `leaderboard`
+
+## Notes
+- Supported payment providers: Paystack, Flutterwave, Stripe. Monnify is not supported (no native subscription product).
+- MRR is normalized to USD for ranking; local currency is preserved for display.

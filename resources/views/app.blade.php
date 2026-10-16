@@ -30,9 +30,23 @@
             }
         </style>
 
-        <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+        <meta name="description" content="Verified MRR for African startups. Real recurring revenue pulled from Paystack, Flutterwave and Stripe — a public leaderboard, embeddable trust badges and a startup marketplace.">
+        <meta name="theme-color" content="#059669">
+        <link rel="canonical" href="{{ config('app.url') }}{{ request()->getPathInfo() }}">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="{{ config('app.name') }}">
+        <meta property="og:title" content="AfriMRR — Verified MRR for African startups">
+        <meta property="og:description" content="Real recurring revenue from Paystack, Flutterwave and Stripe. No screenshots, no vanity metrics.">
+        <meta property="og:image" content="{{ config('app.url') }}/og-image.png">
+        <meta property="og:url" content="{{ config('app.url') }}{{ request()->getPathInfo() }}">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="AfriMRR — Verified MRR for African startups">
+        <meta name="twitter:description" content="Real recurring revenue from Paystack, Flutterwave and Stripe. No screenshots.">
+        <meta name="twitter:image" content="{{ config('app.url') }}/og-image.png">
 
         @fonts
 

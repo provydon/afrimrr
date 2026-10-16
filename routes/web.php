@@ -8,8 +8,10 @@ use App\Http\Controllers\Public\FounderProfileController;
 use App\Http\Controllers\Public\LeaderboardController;
 use App\Http\Controllers\Public\MarketplaceController;
 use App\Http\Controllers\Public\PageController;
+use App\Http\Controllers\Public\SitemapController;
 use App\Http\Controllers\Public\StartupDirectoryController;
 use App\Http\Controllers\Public\StartupProfileController;
+use App\Http\Controllers\Mcp\McpController;
 use App\Http\Controllers\StartupController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +36,13 @@ Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/terms', [PageController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 Route::get('/badge-store', [PageController::class, 'badgeStore'])->name('badge-store');
+Route::get('/developers', [PageController::class, 'developers'])->name('developers');
+
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+// MCP (Model Context Protocol) server — JSON-RPC over HTTP. CSRF-exempt (see bootstrap/app.php).
+Route::post('/mcp', [McpController::class, 'handle'])->name('mcp');
+Route::get('/mcp', [McpController::class, 'info']);
 
 /*
 |--------------------------------------------------------------------------

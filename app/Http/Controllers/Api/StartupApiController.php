@@ -36,4 +36,19 @@ class StartupApiController extends Controller
 
         return response()->json(['data' => StartupPresenter::profile($startup)]);
     }
+
+    public function leaderboard(Request $request): JsonResponse
+    {
+        $limit = min(100, max(1, (int) $request->integer('limit', 50)));
+
+        $startups = Startup::public()->with('owner')
+            ->where('mrr_usd', '>', 0)
+            ->orderByDesc('mrr_usd')
+            ->limit($limit)
+            ->get()
+            ->values()
+            ->map(fn (Startup $s, int $i) => array_merge(StartupPresenter::card($s), ['rank' => $i + 1]));
+
+        return response()->json(['data' => $startups]);
+    }
 }
