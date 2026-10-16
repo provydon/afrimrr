@@ -47,12 +47,12 @@ else
     php artisan config:cache
     php artisan optimize
     php artisan storage:link || true
-    echo "yes" | php artisan octane:install --server=frankenphp 2>/dev/null || true
-    # Use PORT from environment (Cloud Run sets 8080; Render/local may set other; default 8000)
+    # Use PORT from environment (Render injects it; default 8000 elsewhere).
     : "${PORT:=8000}"
-    # --log-level is REQUIRED: without it octane:start parses FrankenPHP's stderr for
-    # Caddy's `msg` key and prints "unknown error" for Laravel's `message`-keyed
-    # Monolog logs, discarding the real content. With it, Octane passes raw stderr
-    # through (real logs reach the platform) and Caddy logs only at/above this level.
-    exec php /app/artisan octane:start --server=frankenphp --host=0.0.0.0 --port="$PORT" --admin-port=2019 --workers=1 --max-requests=500 --log-level="${OCTANE_LOG_LEVEL:-ERROR}"
+    export PORT
+    # Serve with FrankenPHP in classic (non-worker) mode. Octane worker mode fails
+    # to initialize workers on Render ("has not reached frankenphp_handle_request()"),
+    # so we run FrankenPHP's front controller directly — robust and stateless.
+    echo "Serving with FrankenPHP (classic mode) on port $PORT"
+    exec frankenphp run --config /app/docker/Caddyfile --adapter caddyfile
 fi

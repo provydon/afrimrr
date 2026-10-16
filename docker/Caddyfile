@@ -1,0 +1,14 @@
+# FrankenPHP classic (non-worker) serving for Laravel.
+# Avoids Octane worker-mode warmup (which fails to initialize on some hosts).
+# Each request runs through public/index.php via php_server's front-controller routing.
+{
+	admin off
+	auto_https off
+	frankenphp
+}
+
+:{$PORT:8000} {
+	root * /app/public
+	encode zstd br gzip
+	php_server
+}
