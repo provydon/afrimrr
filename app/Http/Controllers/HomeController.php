@@ -12,21 +12,23 @@ class HomeController extends Controller
 {
     public function index(): Response
     {
-        $top = Startup::public()->with('owner')
+        // Landing figures reflect only genuine, non-demo startups — no fabricated
+        // traction. These are live counts/sums straight from the database.
+        $top = Startup::public()->real()->with('owner')
             ->where('mrr_usd', '>', 0)
             ->orderByDesc('mrr_usd')
             ->limit(6)
             ->get()
             ->map(fn (Startup $s, int $i) => array_merge(StartupPresenter::card($s), ['rank' => $i + 1]));
 
-        $totalMrr = (int) Startup::public()->verified()->sum('mrr_usd');
+        $totalMrr = (int) Startup::public()->real()->verified()->sum('mrr_usd');
 
         return Inertia::render('Welcome', [
             'topStartups' => $top,
             'stats' => [
-                'verified_count' => Startup::public()->verified()->count(),
+                'verified_count' => Startup::public()->real()->verified()->count(),
                 'total_mrr_display' => Money::compactUsd($totalMrr),
-                'country_count' => Startup::public()->distinct('country')->count('country'),
+                'country_count' => Startup::public()->real()->distinct('country')->count('country'),
             ],
         ]);
     }

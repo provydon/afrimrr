@@ -124,7 +124,7 @@ const providers = ['Paystack', 'Flutterwave', 'Stripe'];
     <!-- CTA -->
     <section class="mx-auto max-w-6xl px-4 pb-20">
         <div class="rounded-2xl bg-emerald-600 px-8 py-12 text-center text-white">
-            <h2 class="text-3xl font-bold">Stop screenshotting your Stripe dashboard.</h2>
+            <h2 class="text-3xl font-bold">Stop screenshotting your Paystack &amp; Flutterwave dashboards.</h2>
             <p class="mx-auto mt-3 max-w-xl text-emerald-50">
                 Get a tamper-proof, always-live MRR badge the whole ecosystem can trust.
             </p>

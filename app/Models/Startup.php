@@ -88,6 +88,12 @@ class Startup extends Model
         $query->where('is_verified', true);
     }
 
+    /** Exclude seeded demo startups. @param Builder<Startup> $query */
+    public function scopeReal(Builder $query): void
+    {
+        $query->where('is_demo', false);
+    }
+
     public function categoryLabel(): string
     {
         return config('mrr.categories.'.$this->category, 'Other');
