@@ -1,0 +1,99 @@
+# AfriMRR — Render Blueprint
+# Deploy: Render Dashboard → New → Blueprint → pick this repo, or `render blueprint launch`.
+# The web service runs Octane (FrankenPHP) and migrates on boot. The worker (optional,
+# paid) runs the queue + the hourly MRR sync scheduler.
+
+databases:
+  - name: afrimrr-db
+    databaseName: afrimrr
+    user: afrimrr
+    plan: free
+    region: frankfurt
+
+envVarGroups:
+  - name: afrimrr-env
+    envVars:
+      - key: APP_NAME
+        value: AfriMRR
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        sync: false # set as a secret (base64:... from `php artisan key:generate --show`)
+      - key: APP_URL
+        sync: false # set to the live web URL, e.g. https://afrimrr-web.onrender.com
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_LIFETIME
+        value: "120"
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_STACK
+        value: single,stderr
+      - key: LOG_LEVEL
+        value: error
+      - key: OCTANE_LOG_LEVEL
+        value: ERROR
+
+services:
+  # ---- Web (Octane / FrankenPHP) ----
+  - type: web
+    name: afrimrr-web
+    runtime: docker
+    repo: https://github.com/provydon/afrimrr
+    branch: main
+    region: frankfurt
+    plan: free
+    dockerfilePath: ./docker/Dockerfile
+    dockerContext: .
+    healthCheckPath: /up
+    autoDeploy: true
+    envVars:
+      - key: DEPLOYMENT_TYPE
+        value: web
+      - fromGroup: afrimrr-env
+      - key: DB_HOST
+        fromDatabase: { name: afrimrr-db, property: host }
+      - key: DB_PORT
+        fromDatabase: { name: afrimrr-db, property: port }
+      - key: DB_DATABASE
+        fromDatabase: { name: afrimrr-db, property: database }
+      - key: DB_USERNAME
+        fromDatabase: { name: afrimrr-db, property: user }
+      - key: DB_PASSWORD
+        fromDatabase: { name: afrimrr-db, property: password }
+
+  # ---- Worker (queue + hourly MRR sync scheduler) ----
+  # Background workers require a paid plan on Render. Enable this to turn on
+  # automatic hourly re-verification. On-connect and "Sync now" work without it.
+  - type: worker
+    name: afrimrr-worker
+    runtime: docker
+    repo: https://github.com/provydon/afrimrr
+    branch: main
+    region: frankfurt
+    plan: starter
+    dockerfilePath: ./docker/Dockerfile
+    dockerContext: .
+    autoDeploy: true
+    envVars:
+      - key: DEPLOYMENT_TYPE
+        value: worker
+      - fromGroup: afrimrr-env
+      - key: DB_HOST
+        fromDatabase: { name: afrimrr-db, property: host }
+      - key: DB_PORT
+        fromDatabase: { name: afrimrr-db, property: port }
+      - key: DB_DATABASE
+        fromDatabase: { name: afrimrr-db, property: database }
+      - key: DB_USERNAME
+        fromDatabase: { name: afrimrr-db, property: user }
+      - key: DB_PASSWORD
+        fromDatabase: { name: afrimrr-db, property: password }
