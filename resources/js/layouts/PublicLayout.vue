@@ -140,7 +140,7 @@ const isActive = (href: string) => current.value === href || current.value.start
                 </div>
                 <p class="mt-8 text-xs text-muted-foreground">
                     © {{ new Date().getFullYear() }} AfricanMRR. Revenue figures are verified via payment-provider APIs.
-                    <span class="block sm:inline sm:before:content-['_·_']">AfricanMRR is a product of Steven Malog, Inc.</span>
+                    <span class="block sm:inline sm:before:content-['_·_']">AfricanMRR is a product of <a href="https://stevenmalog.com" target="_blank" rel="noopener" class="underline hover:text-foreground">Steven Malog, Inc.</a></span>
                 </p>
             </div>
         </footer>
