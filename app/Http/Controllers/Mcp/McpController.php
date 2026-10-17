@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 /**
  * Minimal, stateless MCP (Model Context Protocol) server over streamable HTTP.
- * Speaks JSON-RPC 2.0. Exposes read-only tools over AfriMRR's public data.
+ * Speaks JSON-RPC 2.0. Exposes read-only tools over AfricanMRR's public data.
  */
 class McpController extends Controller
 {
@@ -35,7 +35,7 @@ class McpController extends Controller
     public function info(): JsonResponse
     {
         return response()->json([
-            'name' => 'AfriMRR MCP',
+            'name' => 'AfricanMRR MCP',
             'transport' => 'streamable-http',
             'endpoint' => url('/mcp'),
             'protocolVersion' => self::PROTOCOL,
@@ -62,7 +62,7 @@ class McpController extends Controller
             'initialize' => $this->result($id, [
                 'protocolVersion' => self::PROTOCOL,
                 'capabilities' => ['tools' => ['listChanged' => false]],
-                'serverInfo' => ['name' => 'AfriMRR', 'version' => '1.0.0'],
+                'serverInfo' => ['name' => 'AfricanMRR', 'version' => '1.0.0'],
                 'instructions' => 'Read-only access to verified MRR data for African startups.',
             ]),
             'ping' => $this->result($id, new \stdClass),

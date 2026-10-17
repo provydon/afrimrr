@@ -65,7 +65,7 @@ class DemoSeeder extends Seeder
                     'user_id' => $users[$founder]->id,
                     'name' => $name,
                     'tagline' => $this->tagline($cat),
-                    'description' => "{$name} is a demo startup showcasing verified MRR on AfriMRR.",
+                    'description' => "{$name} is a demo startup showcasing verified MRR on AfricanMRR.",
                     'website' => 'https://example.com',
                     'category' => $cat === 'marketplace' ? 'other' : $cat,
                     'country' => $country,

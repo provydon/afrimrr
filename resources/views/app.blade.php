@@ -39,12 +39,12 @@
         <link rel="canonical" href="{{ config('app.url') }}{{ request()->getPathInfo() }}">
         <meta property="og:type" content="website">
         <meta property="og:site_name" content="{{ config('app.name') }}">
-        <meta property="og:title" content="AfriMRR — Verified MRR for African startups">
+        <meta property="og:title" content="AfricanMRR — Verified MRR for African startups">
         <meta property="og:description" content="Real recurring revenue from Paystack, Flutterwave and Stripe. No screenshots, no vanity metrics.">
         <meta property="og:image" content="{{ config('app.url') }}/og-image.png">
         <meta property="og:url" content="{{ config('app.url') }}{{ request()->getPathInfo() }}">
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="AfriMRR — Verified MRR for African startups">
+        <meta name="twitter:title" content="AfricanMRR — Verified MRR for African startups">
         <meta name="twitter:description" content="Real recurring revenue from Paystack, Flutterwave and Stripe. No screenshots.">
         <meta name="twitter:image" content="{{ config('app.url') }}/og-image.png">
 

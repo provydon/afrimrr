@@ -1,4 +1,4 @@
-# AfriMRR
+# AfricanMRR
 
 **Verified MRR for African startups.** TrustMRR, but it plugs into the payment rails
 African founders actually use — Paystack, Flutterwave and Stripe.

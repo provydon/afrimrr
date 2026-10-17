@@ -1,4 +1,4 @@
-# AfriMRR — Render Blueprint
+# AfricanMRR — Render Blueprint
 # Deploy: Render Dashboard → New → Blueprint → pick this repo, or `render blueprint launch`.
 # The web service runs Octane (FrankenPHP) and migrates on boot. The worker (optional,
 # paid) runs the queue + the hourly MRR sync scheduler.
@@ -14,7 +14,7 @@ envVarGroups:
   - name: afrimrr-env
     envVars:
       - key: APP_NAME
-        value: AfriMRR
+        value: AfricanMRR
       - key: APP_ENV
         value: production
       - key: APP_DEBUG

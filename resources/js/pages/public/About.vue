@@ -5,7 +5,7 @@ import { Head, Link } from '@inertiajs/vue3';
 <template>
     <Head title="About" />
     <div class="mx-auto max-w-3xl px-4 py-16">
-        <h1 class="text-3xl font-extrabold tracking-tight">Why AfriMRR exists</h1>
+        <h1 class="text-3xl font-extrabold tracking-tight">Why AfricanMRR exists</h1>
         <div class="mt-6 space-y-4 text-muted-foreground">
             <p>
                 African founders build real, revenue-generating businesses every day — but the ecosystem
@@ -13,7 +13,7 @@ import { Head, Link } from '@inertiajs/vue3';
                 noise, and honest founders don't get the credit they've earned.
             </p>
             <p>
-                AfriMRR fixes that. We plug straight into the payment rails African startups actually use —
+                AfricanMRR fixes that. We plug straight into the payment rails African startups actually use —
                 Paystack, Flutterwave and Stripe — and turn live subscription data into a verified,
                 always-current MRR figure. No manual entry. No cheating.
             </p>

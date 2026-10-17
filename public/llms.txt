@@ -1,6 +1,6 @@
-# AfriMRR
+# AfricanMRR
 
-> Verified monthly recurring revenue (MRR) for African startups. Founders connect Paystack, Flutterwave or Stripe; AfriMRR reads active subscriptions directly from the provider, normalizes every plan interval and currency to a monthly USD figure, and publishes a tamper-proof verified number. No screenshots, no self-reported vanity metrics.
+> Verified monthly recurring revenue (MRR) for African startups. Founders connect Paystack, Flutterwave or Stripe; AfricanMRR reads active subscriptions directly from the provider, normalizes every plan interval and currency to a monthly USD figure, and publishes a tamper-proof verified number. No screenshots, no self-reported vanity metrics.
 
 ## Pages
 - [Leaderboard](https://africanmrr.com/leaderboard): Top 100 African startups ranked by verified MRR, with month-over-month growth.

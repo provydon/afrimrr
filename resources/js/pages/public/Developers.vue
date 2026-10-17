@@ -30,7 +30,7 @@ function copy(text: string) {
     <div class="mx-auto max-w-4xl px-4 py-14">
         <h1 class="text-3xl font-extrabold tracking-tight">Developers</h1>
         <p class="mt-2 text-muted-foreground">
-            A public, no-auth JSON API and an MCP server over AfriMRR's verified-revenue data.
+            A public, no-auth JSON API and an MCP server over AfricanMRR's verified-revenue data.
         </p>
 
         <!-- REST API -->

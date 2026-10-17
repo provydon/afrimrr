@@ -35,7 +35,7 @@ const isActive = (href: string) => current.value === href || current.value.start
                         <span class="flex size-8 items-center justify-center rounded-lg bg-emerald-600 text-white">
                             <BadgeCheck class="size-5" />
                         </span>
-                        <span class="text-lg tracking-tight">AfriMRR</span>
+                        <span class="text-lg tracking-tight">AfricanMRR</span>
                     </Link>
                     <nav class="hidden items-center gap-1 md:flex">
                         <Link
@@ -110,7 +110,7 @@ const isActive = (href: string) => current.value === href || current.value.start
                             <span class="flex size-7 items-center justify-center rounded-lg bg-emerald-600 text-white">
                                 <BadgeCheck class="size-4" />
                             </span>
-                            AfriMRR
+                            AfricanMRR
                         </div>
                         <p class="mt-3 text-sm text-muted-foreground">
                             Verified revenue for African startups. MRR pulled straight from Paystack,
@@ -139,7 +139,8 @@ const isActive = (href: string) => current.value === href || current.value.start
                     </div>
                 </div>
                 <p class="mt-8 text-xs text-muted-foreground">
-                    © {{ new Date().getFullYear() }} AfriMRR. Revenue figures are verified via payment-provider APIs.
+                    © {{ new Date().getFullYear() }} AfricanMRR. Revenue figures are verified via payment-provider APIs.
+                    <span class="block sm:inline sm:before:content-['_·_']">AfricanMRR is a product of Steven Malog, Inc.</span>
                 </p>
             </div>
         </footer>

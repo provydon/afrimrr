@@ -14,9 +14,9 @@ const title = computed(() => (props.kind === 'terms' ? 'Terms of Service' : 'Pri
         <p class="mt-2 text-sm text-muted-foreground">Last updated {{ new Date().getFullYear() }}</p>
 
         <div v-if="kind === 'terms'" class="mt-8 space-y-4 text-sm text-muted-foreground">
-            <p>By using AfriMRR you agree to connect only payment-provider credentials you are authorized to use, and to display revenue figures that represent your own business.</p>
+            <p>By using AfricanMRR you agree to connect only payment-provider credentials you are authorized to use, and to display revenue figures that represent your own business.</p>
             <p>We provide verification on a best-effort basis using third-party provider APIs. Figures are informational and not financial advice or a guarantee of any kind.</p>
-            <p>Marketplace listings are between buyers and sellers directly; AfriMRR is not a party to any transaction and makes no warranty as to any sale.</p>
+            <p>Marketplace listings are between buyers and sellers directly; AfricanMRR is not a party to any transaction and makes no warranty as to any sale.</p>
             <p>We may suspend accounts that attempt to misrepresent revenue, abuse the API, or violate provider terms.</p>
         </div>
 
