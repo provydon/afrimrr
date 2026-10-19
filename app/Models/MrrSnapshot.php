@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Database\Factories\MrrSnapshotFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -12,10 +15,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $mrr_local
  * @property string $display_currency
  * @property int $active_subscriptions
- * @property \Illuminate\Support\Carbon $captured_on
+ * @property Carbon $captured_on
  */
 class MrrSnapshot extends Model
 {
+    /** @use HasFactory<MrrSnapshotFactory> */
+    use HasFactory;
+
     protected $guarded = ['id'];
 
     protected function casts(): array

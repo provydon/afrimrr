@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Database\Factories\ConnectionFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -12,10 +15,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $credentials
  * @property string $status
  * @property string|null $last_error
- * @property \Illuminate\Support\Carbon|null $last_synced_at
+ * @property Carbon|null $last_synced_at
  */
 class Connection extends Model
 {
+    /** @use HasFactory<ConnectionFactory> */
+    use HasFactory;
+
     protected $guarded = ['id'];
 
     protected function casts(): array

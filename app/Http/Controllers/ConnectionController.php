@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\SyncStartup;
 use App\Models\Startup;
-use App\Services\Mrr\ConnectorFactory;
+use App\Support\Money;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -24,9 +24,9 @@ class ConnectionController extends Controller
                 'name' => $startup->name,
                 'slug' => $startup->slug,
                 'is_verified' => $startup->is_verified,
-                'mrr_usd_display' => \App\Support\Money::usd($startup->mrr_usd),
+                'mrr_usd_display' => Money::usd($startup->mrr_usd),
             ],
-            'providers' => collect(config('mrr.providers'))->map(fn ($p, $key) => [
+            'providers' => collect((array) config('mrr.providers'))->map(fn ($p, $key) => [
                 'key' => $key,
                 'label' => $p['label'],
                 'key_hint' => $p['key_hint'],
@@ -58,7 +58,7 @@ class ConnectionController extends Controller
 
         $result = $sync->handle($startup->fresh());
 
-        if (! ($result['ok'] ?? false)) {
+        if (! $result['ok']) {
             $message = $result['errors'][$data['provider']] ?? 'Could not verify with that key.';
 
             return back()->with('error', $message);
@@ -73,7 +73,7 @@ class ConnectionController extends Controller
 
         $result = $sync->handle($startup);
 
-        if (! ($result['ok'] ?? false)) {
+        if (! $result['ok']) {
             return back()->with('error', reset($result['errors']) ?: 'Sync failed.');
         }
 

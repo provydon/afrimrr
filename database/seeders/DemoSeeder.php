@@ -8,6 +8,7 @@ use App\Services\Mrr\CurrencyConverter;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DemoSeeder extends Seeder
 {
@@ -60,7 +61,7 @@ class DemoSeeder extends Seeder
             $localMinor = $rate > 0 ? (int) round($usdCents / $rate) : $usdCents;
 
             $startup = Startup::updateOrCreate(
-                ['slug' => \Illuminate\Support\Str::slug($name)],
+                ['slug' => Str::slug($name)],
                 [
                     'user_id' => $users[$founder]->id,
                     'name' => $name,

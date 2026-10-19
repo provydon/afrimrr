@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Database\Factories\StartupFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
@@ -28,15 +30,16 @@ use Illuminate\Support\Str;
  * @property string $display_currency
  * @property int $active_subscriptions
  * @property float|null $mom_growth
- * @property \Illuminate\Support\Carbon|null $last_synced_at
+ * @property Carbon|null $last_synced_at
  * @property bool $is_public
  * @property bool $is_for_sale
  * @property int|null $asking_price_usd
  * @property bool $is_demo
+ * @property Carbon|null $announced_at
  */
 class Startup extends Model
 {
-    /** @use HasFactory<\Database\Factories\StartupFactory> */
+    /** @use HasFactory<StartupFactory> */
     use HasFactory;
 
     protected $guarded = ['id'];
@@ -50,6 +53,7 @@ class Startup extends Model
             'is_demo' => 'boolean',
             'mom_growth' => 'float',
             'last_synced_at' => 'datetime',
+            'announced_at' => 'datetime',
         ];
     }
 
@@ -88,7 +92,11 @@ class Startup extends Model
         $query->where('is_verified', true);
     }
 
-    /** Exclude seeded demo startups. @param Builder<Startup> $query */
+    /**
+     * Exclude seeded demo startups.
+     *
+     * @param  Builder<Startup>  $query
+     */
     public function scopeReal(Builder $query): void
     {
         $query->where('is_demo', false);

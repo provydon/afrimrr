@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ForceHttpsMiddleware;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
@@ -19,8 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
         $middleware->validateCsrfTokens(except: ['mcp']);
 
-
-        $middleware->web(prepend: [\App\Http\Middleware\ForceHttpsMiddleware::class]);
+        $middleware->web(prepend: [ForceHttpsMiddleware::class]);
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(append: [

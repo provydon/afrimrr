@@ -18,7 +18,7 @@ class McpController extends Controller
 
     public function handle(Request $request): JsonResponse
     {
-        $payload = $request->json()->all();
+        $payload = (array) json_decode((string) $request->getContent(), true);
 
         // Batched requests.
         if (array_is_list($payload) && $payload !== []) {
@@ -45,7 +45,7 @@ class McpController extends Controller
 
     /**
      * @param  array<string, mixed>  $msg
-     * @return array<string, mixed>|null  null for notifications
+     * @return array<string, mixed>|null null for notifications
      */
     private function dispatch(array $msg): ?array
     {
@@ -159,9 +159,9 @@ class McpController extends Controller
 
     /**
      * @param  array<string, mixed>  $args
-     * @return array<string, mixed>|null
+     * @return array<string, mixed>
      */
-    private function getStartup(array $args): ?array
+    private function getStartup(array $args): array
     {
         $startup = Startup::public()->with('owner')->where('slug', $args['slug'] ?? '')->first();
 
@@ -182,11 +182,17 @@ class McpController extends Controller
         return ['startups' => $rows];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function result(mixed $id, mixed $result): array
     {
         return ['jsonrpc' => '2.0', 'id' => $id, 'result' => $result];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function error(mixed $id, int $code, string $message): array
     {
         return ['jsonrpc' => '2.0', 'id' => $id, 'error' => ['code' => $code, 'message' => $message]];

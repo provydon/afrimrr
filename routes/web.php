@@ -3,6 +3,7 @@
 use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Mcp\McpController;
 use App\Http\Controllers\Public\BadgeController;
 use App\Http\Controllers\Public\FounderProfileController;
 use App\Http\Controllers\Public\LeaderboardController;
@@ -11,7 +12,6 @@ use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\SitemapController;
 use App\Http\Controllers\Public\StartupDirectoryController;
 use App\Http\Controllers\Public\StartupProfileController;
-use App\Http\Controllers\Mcp\McpController;
 use App\Http\Controllers\StartupController;
 use Illuminate\Support\Facades\Route;
 

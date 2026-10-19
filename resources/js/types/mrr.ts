@@ -4,8 +4,18 @@ export interface Founder {
     avatar_url?: string | null;
     headline?: string | null;
     twitter?: string | null;
+    twitter_url?: string | null;
     website?: string | null;
     bio?: string | null;
+}
+
+export interface FounderStats {
+    total_mrr_display: string;
+    arr_display: string;
+    total_startups: number;
+    verified_startups: number;
+    followers: number | null;
+    followers_display: string | null;
 }
 
 export interface StartupCardData {

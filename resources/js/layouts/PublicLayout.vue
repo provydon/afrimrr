@@ -5,9 +5,10 @@ import { BadgeCheck, Moon, Sun, Menu } from '@lucide/vue';
 import { Toaster } from '@/components/ui/sonner';
 import { useAppearance } from '@/composables/useAppearance';
 import { ref } from 'vue';
+import type { Auth } from '@/types/auth';
 
 const page = usePage();
-const user = computed(() => (page.props.auth as { user: { username: string } | null })?.user ?? null);
+const user = computed(() => (page.props.auth as Auth | undefined)?.user ?? null);
 
 const { resolvedAppearance, updateAppearance } = useAppearance();
 function toggleTheme() {

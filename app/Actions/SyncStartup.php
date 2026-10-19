@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Jobs\AnnounceStartup;
 use App\Models\Startup;
 use App\Services\Mrr\ConnectorException;
 use App\Services\Mrr\ConnectorFactory;
@@ -15,7 +16,7 @@ class SyncStartup
      * Pull MRR from every active connection on the startup, aggregate, persist,
      * snapshot it, and recompute month-over-month growth.
      *
-     * @return array{ok: bool, mrr_usd?: int, errors?: array<string, string>}
+     * @return array{ok: bool, mrr_usd?: int, errors: array<string, string>}
      */
     public function handle(Startup $startup): array
     {
@@ -83,20 +84,49 @@ class SyncStartup
         $startup->mom_growth = $this->monthOverMonthGrowth($startup);
         $startup->save();
 
+        $this->maybeAnnounce($startup);
+
         return ['ok' => true, 'mrr_usd' => $total->usdCents, 'errors' => $errors];
+    }
+
+    /**
+     * Queue the one-time "just joined" announcement once a startup has verified
+     * MRR to show. The job re-checks and records announced_at, so repeat syncs
+     * never post twice.
+     */
+    private function maybeAnnounce(Startup $startup): void
+    {
+        if (! config('social.enabled')) {
+            return;
+        }
+
+        if ($startup->is_public && $startup->announced_at === null && $startup->mrr_usd > 0) {
+            AnnounceStartup::dispatch($startup->id);
+        }
     }
 
     private function snapshot(Startup $startup, int $usdCents, int $localMinor, string $currency, int $subs): void
     {
-        $startup->snapshots()->updateOrCreate(
-            ['captured_on' => Carbon::today()->toDateString()],
-            [
-                'mrr_usd' => $usdCents,
-                'mrr_local' => $localMinor,
-                'display_currency' => $currency,
-                'active_subscriptions' => $subs,
-            ]
-        );
+        $today = Carbon::today()->toDateString();
+
+        $attributes = [
+            'mrr_usd' => $usdCents,
+            'mrr_local' => $localMinor,
+            'display_currency' => $currency,
+            'active_subscriptions' => $subs,
+        ];
+
+        // whereDate matches regardless of how the driver stores the time component
+        // (SQLite keeps 00:00:00, Postgres truncates) so same-day syncs stay idempotent.
+        $existing = $startup->snapshots()->whereDate('captured_on', $today)->first();
+
+        if ($existing) {
+            $existing->update($attributes);
+
+            return;
+        }
+
+        $startup->snapshots()->create($attributes + ['captured_on' => $today]);
     }
 
     private function monthOverMonthGrowth(Startup $startup): ?float

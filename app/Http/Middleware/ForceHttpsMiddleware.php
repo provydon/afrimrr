@@ -20,9 +20,10 @@ class ForceHttpsMiddleware
 
         $productionDomains = ['onrender.com', 'fly.dev', 'railway.app', 'up.railway.app'];
         $isProductionDomain = $host && array_filter($productionDomains, fn ($d) => str_ends_with($host, $d)) !== [];
-        $shouldForce = $isProductionDomain
-            || ! app()->environment('local')
-            || str_starts_with($appUrl, 'https://');
+        $shouldForce = ! app()->environment('testing')
+            && ($isProductionDomain
+                || ! app()->environment('local')
+                || str_starts_with($appUrl, 'https://'));
 
         if ($shouldForce) {
             URL::forceScheme('https');
