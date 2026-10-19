@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\OverviewController;
 use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -67,6 +68,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{startup}/sync', [ConnectionController::class, 'sync'])->name('startups.sync');
         Route::delete('/{startup}/connections/{provider}', [ConnectionController::class, 'destroy'])->name('connections.destroy');
     });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin (auth + is_admin)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [OverviewController::class, 'index'])->name('overview');
+
+    Route::get('/subscribers', [App\Http\Controllers\Admin\SubscriberController::class, 'index'])->name('subscribers');
+    Route::get('/subscribers/export', [App\Http\Controllers\Admin\SubscriberController::class, 'export'])->name('subscribers.export');
+
+    Route::get('/startups', [App\Http\Controllers\Admin\StartupController::class, 'index'])->name('startups');
+    Route::put('/startups/{startup:id}', [App\Http\Controllers\Admin\StartupController::class, 'update'])->name('startups.update');
+    Route::delete('/startups/{startup:id}', [App\Http\Controllers\Admin\StartupController::class, 'destroy'])->name('startups.destroy');
 });
 
 require __DIR__.'/settings.php';

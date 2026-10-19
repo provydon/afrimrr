@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\ForceHttpsMiddleware;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
         $middleware->validateCsrfTokens(except: ['mcp']);
+        $middleware->alias(['admin' => EnsureUserIsAdmin::class]);
 
         $middleware->web(prepend: [ForceHttpsMiddleware::class]);
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
