@@ -3,6 +3,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { BadgeCheck, Moon, Sun, Menu } from '@lucide/vue';
 import { Toaster } from '@/components/ui/sonner';
+import NewsletterPopup from '@/components/NewsletterPopup.vue';
 import { useAppearance } from '@/composables/useAppearance';
 import { ref } from 'vue';
 import type { Auth } from '@/types/auth';
@@ -147,5 +148,6 @@ const isActive = (href: string) => current.value === href || current.value.start
         </footer>
 
         <Toaster rich-colors position="top-center" />
+        <NewsletterPopup />
     </div>
 </template>

@@ -50,6 +50,7 @@ class StartupController extends Controller
                 'country' => $startup->country,
                 'founded_year' => $startup->founded_year,
                 'is_public' => $startup->is_public,
+                'is_anonymous' => $startup->is_anonymous,
                 'is_for_sale' => $startup->is_for_sale,
                 'asking_price_usd' => $startup->asking_price_usd ? $startup->asking_price_usd / 100 : null,
                 'has_connections' => $startup->connections->isNotEmpty(),
@@ -91,6 +92,7 @@ class StartupController extends Controller
             'country' => ['required', Rule::in(array_keys(config('mrr.countries')))],
             'founded_year' => ['nullable', 'integer', 'min:1990', 'max:'.(date('Y') + 1)],
             'is_public' => ['boolean'],
+            'is_anonymous' => ['boolean'],
             'is_for_sale' => ['boolean'],
             'asking_price_usd' => ['nullable', 'numeric', 'min:0', 'max:1000000000'],
             'manual_mrr_amount' => ['nullable', 'numeric', 'min:0'],
@@ -113,6 +115,7 @@ class StartupController extends Controller
             'country' => $data['country'],
             'founded_year' => $data['founded_year'] ?? null,
             'is_public' => $data['is_public'] ?? true,
+            'is_anonymous' => $data['is_anonymous'] ?? false,
             'is_for_sale' => $data['is_for_sale'] ?? false,
             'asking_price_usd' => isset($data['asking_price_usd']) ? (int) round($data['asking_price_usd'] * 100) : null,
         ]);

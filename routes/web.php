@@ -12,6 +12,7 @@ use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\SitemapController;
 use App\Http\Controllers\Public\StartupDirectoryController;
 use App\Http\Controllers\Public\StartupProfileController;
+use App\Http\Controllers\Public\SubscriberController;
 use App\Http\Controllers\StartupController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,8 @@ Route::get('/badge-store', [PageController::class, 'badgeStore'])->name('badge-s
 Route::get('/developers', [PageController::class, 'developers'])->name('developers');
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe');
 
 // MCP (Model Context Protocol) server — JSON-RPC over HTTP. CSRF-exempt (see bootstrap/app.php).
 Route::post('/mcp', [McpController::class, 'handle'])->name('mcp');

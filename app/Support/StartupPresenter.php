@@ -13,11 +13,17 @@ class StartupPresenter
      */
     public static function card(Startup $startup): array
     {
+        // Anonymous startups are ranked on MRR but keep their identity hidden —
+        // name/slug/logo/tagline never leave the server, so there is nothing to
+        // un-blur in the browser.
+        $anonymous = $startup->is_anonymous;
+
         return [
-            'name' => $startup->name,
-            'slug' => $startup->slug,
-            'tagline' => $startup->tagline,
-            'logo_url' => $startup->logo_url,
+            'name' => $anonymous ? 'Anonymous Startup' : $startup->name,
+            'slug' => $anonymous ? null : $startup->slug,
+            'tagline' => $anonymous ? null : $startup->tagline,
+            'logo_url' => $anonymous ? null : $startup->logo_url,
+            'is_anonymous' => $anonymous,
             'category' => $startup->category,
             'category_label' => $startup->categoryLabel(),
             'country' => $startup->country,
@@ -57,8 +63,8 @@ class StartupPresenter
             ]);
 
         return array_merge(self::card($startup), [
-            'description' => $startup->description,
-            'website' => $startup->website,
+            'description' => $startup->is_anonymous ? null : $startup->description,
+            'website' => $startup->is_anonymous ? null : $startup->website,
             'founded_year' => $startup->founded_year,
             'active_subscriptions' => $startup->active_subscriptions,
             'last_synced_at' => $startup->last_synced_at?->diffForHumans(),

@@ -41,10 +41,16 @@ class StartupFactory extends Factory
             'mom_growth' => null,
             'last_synced_at' => null,
             'is_public' => true,
+            'is_anonymous' => false,
             'is_for_sale' => false,
             'asking_price_usd' => null,
             'is_demo' => false,
         ];
+    }
+
+    public function anonymous(): static
+    {
+        return $this->state(fn () => ['is_anonymous' => true]);
     }
 
     public function verified(): static

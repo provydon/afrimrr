@@ -12,6 +12,7 @@ interface StartupData {
     country?: string;
     founded_year?: number | null;
     is_public?: boolean;
+    is_anonymous?: boolean;
     is_for_sale?: boolean;
     asking_price_usd?: number | null;
     has_connections?: boolean;
@@ -35,6 +36,7 @@ const form = useForm({
     country: props.startup?.country ?? 'NG',
     founded_year: props.startup?.founded_year ?? null,
     is_public: props.startup?.is_public ?? true,
+    is_anonymous: props.startup?.is_anonymous ?? false,
     is_for_sale: props.startup?.is_for_sale ?? false,
     asking_price_usd: props.startup?.asking_price_usd ?? null,
     manual_mrr_amount: null as number | null,
@@ -121,6 +123,10 @@ const inputClass =
             <label class="flex items-center gap-2 text-sm">
                 <input v-model="form.is_public" type="checkbox" class="size-4 rounded border-border" />
                 Show on public leaderboard &amp; directory
+            </label>
+            <label v-if="form.is_public" class="flex items-center gap-2 text-sm">
+                <input v-model="form.is_anonymous" type="checkbox" class="size-4 rounded border-border" />
+                Stay anonymous (rank by MRR, hide name &amp; logo)
             </label>
             <label class="flex items-center gap-2 text-sm">
                 <input v-model="form.is_for_sale" type="checkbox" class="size-4 rounded border-border" />

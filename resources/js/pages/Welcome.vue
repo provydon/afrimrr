@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import { BadgeCheck, LineChart, ShieldCheck, Zap } from '@lucide/vue';
+import { BadgeCheck, EyeOff, LineChart, ShieldCheck, Zap } from '@lucide/vue';
 import type { StartupCardData } from '@/types/mrr';
 
 defineProps<{
@@ -98,23 +98,26 @@ const providers = ['Paystack', 'Flutterwave', 'Stripe'];
         </div>
 
         <div v-if="topStartups.length" class="mt-6 overflow-hidden rounded-xl border border-border">
-            <Link
+            <component
+                :is="s.is_anonymous ? 'div' : Link"
                 v-for="s in topStartups"
-                :key="s.slug"
-                :href="`/startups/${s.slug}`"
-                class="flex items-center gap-4 border-b border-border bg-card px-4 py-3 last:border-0 hover:bg-accent"
+                :key="s.rank"
+                v-bind="s.is_anonymous ? {} : { href: `/startups/${s.slug}` }"
+                class="flex items-center gap-4 border-b border-border bg-card px-4 py-3 last:border-0"
+                :class="s.is_anonymous ? 'cursor-default' : 'hover:bg-accent'"
             >
                 <span class="w-6 text-center font-bold text-muted-foreground">{{ s.rank }}</span>
-                <span class="flex size-9 items-center justify-center rounded-lg bg-emerald-600/10 text-sm font-bold text-emerald-600">{{ s.name.charAt(0) }}</span>
+                <span v-if="s.is_anonymous" class="flex size-9 items-center justify-center rounded-lg bg-muted text-muted-foreground"><EyeOff class="size-4" /></span>
+                <span v-else class="flex size-9 items-center justify-center rounded-lg bg-emerald-600/10 text-sm font-bold text-emerald-600">{{ s.name.charAt(0) }}</span>
                 <div class="min-w-0 flex-1">
                     <div class="flex items-center gap-1 font-semibold">
-                        {{ s.name }}
+                        <span :class="s.is_anonymous ? 'select-none blur-[4px]' : ''">{{ s.name }}</span>
                         <BadgeCheck v-if="s.is_verified" class="size-4 text-emerald-600" />
                     </div>
                     <p class="truncate text-xs text-muted-foreground">{{ s.category_label }} · {{ s.country_label }}</p>
                 </div>
                 <span class="font-bold">{{ s.mrr_usd_display }}</span>
-            </Link>
+            </component>
         </div>
         <p v-else class="mt-6 rounded-xl border border-dashed border-border p-10 text-center text-muted-foreground">
             No startups yet. <Link href="/register" class="font-semibold text-emerald-600">Be the first to verify →</Link>

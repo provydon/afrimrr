@@ -12,7 +12,7 @@ class StartupProfileController extends Controller
 {
     public function show(Startup $startup): Response
     {
-        abort_unless($startup->is_public, 404);
+        abort_unless($startup->is_public && ! $startup->is_anonymous, 404);
 
         $startup->load('owner');
 

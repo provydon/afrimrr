@@ -163,7 +163,9 @@ class McpController extends Controller
      */
     private function getStartup(array $args): array
     {
-        $startup = Startup::public()->with('owner')->where('slug', $args['slug'] ?? '')->first();
+        $startup = Startup::public()->with('owner')
+            ->where('is_anonymous', false)
+            ->where('slug', $args['slug'] ?? '')->first();
 
         return $startup ? StartupPresenter::profile($startup) : ['error' => 'not found'];
     }

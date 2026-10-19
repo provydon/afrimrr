@@ -111,7 +111,7 @@ function share() {
         <!-- Startups -->
         <h2 class="mt-10 text-lg font-bold">Startups</h2>
         <div v-if="startups.length" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <StartupCard v-for="s in startups" :key="s.slug" :startup="s" />
+            <StartupCard v-for="(s, i) in startups" :key="s.slug ?? `anon-${i}`" :startup="s" />
         </div>
         <p v-else class="mt-4 rounded-xl border border-dashed border-border p-10 text-center text-muted-foreground">No public startups yet.</p>
     </div>

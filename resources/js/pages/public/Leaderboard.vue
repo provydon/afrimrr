@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import { BadgeCheck, TrendingDown, TrendingUp } from '@lucide/vue';
+import { BadgeCheck, EyeOff, TrendingDown, TrendingUp } from '@lucide/vue';
 import type { StartupCardData } from '@/types/mrr';
 
 const props = defineProps<{
@@ -49,18 +49,23 @@ const medal = (rank: number) => (rank === 1 ? '🥇' : rank === 2 ? '🥈' : ran
                 <span class="text-right">Growth</span>
             </div>
 
-            <Link
+            <component
+                :is="s.is_anonymous ? 'div' : Link"
                 v-for="s in props.startups"
-                :key="s.slug"
-                :href="`/startups/${s.slug}`"
-                class="grid grid-cols-[32px_1fr_auto] items-center gap-4 border-b border-border bg-card px-4 py-3 last:border-0 hover:bg-accent sm:grid-cols-[48px_1fr_140px_120px]"
+                :key="s.rank"
+                v-bind="s.is_anonymous ? {} : { href: `/startups/${s.slug}` }"
+                class="grid grid-cols-[32px_1fr_auto] items-center gap-4 border-b border-border bg-card px-4 py-3 last:border-0 sm:grid-cols-[48px_1fr_140px_120px]"
+                :class="s.is_anonymous ? 'cursor-default' : 'hover:bg-accent'"
             >
                 <span class="text-center text-lg font-bold">{{ medal(s.rank) ?? s.rank }}</span>
                 <div class="flex min-w-0 items-center gap-3">
-                    <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-emerald-600/10 text-sm font-bold text-emerald-600">{{ s.name.charAt(0) }}</span>
+                    <span v-if="s.is_anonymous" class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+                        <EyeOff class="size-4" />
+                    </span>
+                    <span v-else class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-emerald-600/10 text-sm font-bold text-emerald-600">{{ s.name.charAt(0) }}</span>
                     <div class="min-w-0">
                         <div class="flex items-center gap-1 font-semibold">
-                            <span class="truncate">{{ s.name }}</span>
+                            <span class="truncate" :class="s.is_anonymous ? 'select-none blur-[4px]' : ''">{{ s.name }}</span>
                             <BadgeCheck v-if="s.is_verified" class="size-4 shrink-0 text-emerald-600" />
                         </div>
                         <p class="truncate text-xs text-muted-foreground">{{ s.category_label }} · {{ s.country_label }}</p>
@@ -82,7 +87,7 @@ const medal = (rank: number) => (rank === 1 ? '🥇' : rank === 2 ? '🥈' : ran
                     </span>
                     <span v-else class="text-sm text-muted-foreground">—</span>
                 </div>
-            </Link>
+            </component>
 
             <p v-if="!props.startups.length" class="bg-card p-12 text-center text-muted-foreground">
                 No startups in this category yet.

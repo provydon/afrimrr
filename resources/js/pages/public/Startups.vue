@@ -63,7 +63,7 @@ watch(form, () => {
         </div>
 
         <div v-if="props.startups.data.length" class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <StartupCard v-for="s in props.startups.data" :key="s.slug" :startup="s" />
+            <StartupCard v-for="(s, i) in props.startups.data" :key="s.slug ?? `anon-${i}`" :startup="s" />
         </div>
         <p v-else class="mt-12 rounded-xl border border-dashed border-border p-12 text-center text-muted-foreground">
             No startups match your filters.

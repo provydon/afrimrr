@@ -32,6 +32,7 @@ use Illuminate\Support\Str;
  * @property float|null $mom_growth
  * @property Carbon|null $last_synced_at
  * @property bool $is_public
+ * @property bool $is_anonymous
  * @property bool $is_for_sale
  * @property int|null $asking_price_usd
  * @property bool $is_demo
@@ -49,6 +50,7 @@ class Startup extends Model
         return [
             'is_verified' => 'boolean',
             'is_public' => 'boolean',
+            'is_anonymous' => 'boolean',
             'is_for_sale' => 'boolean',
             'is_demo' => 'boolean',
             'mom_growth' => 'float',

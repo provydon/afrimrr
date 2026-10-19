@@ -21,7 +21,8 @@ export interface FounderStats {
 export interface StartupCardData {
     rank?: number;
     name: string;
-    slug: string;
+    slug: string | null;
+    is_anonymous?: boolean;
     tagline: string | null;
     logo_url: string | null;
     category: string;

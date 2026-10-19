@@ -1,20 +1,33 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BadgeCheck, TrendingDown, TrendingUp } from '@lucide/vue';
+import { computed } from 'vue';
+import { BadgeCheck, EyeOff, TrendingDown, TrendingUp } from '@lucide/vue';
 import type { StartupCardData } from '@/types/mrr';
 
-defineProps<{ startup: StartupCardData; showPrice?: boolean }>();
+const props = defineProps<{ startup: StartupCardData; showPrice?: boolean }>();
+
+// Anonymous startups are shown but not linkable (no identity to reveal).
+const root = computed(() => (props.startup.is_anonymous ? 'div' : Link));
+const linkProps = computed(() => (props.startup.is_anonymous ? {} : { href: `/startups/${props.startup.slug}` }));
 </script>
 
 <template>
-    <Link
-        :href="`/startups/${startup.slug}`"
-        class="group flex flex-col rounded-xl border border-border bg-card p-5 transition hover:border-emerald-500/50 hover:shadow-lg"
+    <component
+        :is="root"
+        v-bind="linkProps"
+        class="group flex flex-col rounded-xl border border-border bg-card p-5 transition"
+        :class="startup.is_anonymous ? 'cursor-default' : 'hover:border-emerald-500/50 hover:shadow-lg'"
     >
         <div class="flex items-start justify-between gap-3">
             <div class="flex items-center gap-3">
+                <span
+                    v-if="startup.is_anonymous"
+                    class="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground"
+                >
+                    <EyeOff class="size-4" />
+                </span>
                 <img
-                    v-if="startup.logo_url"
+                    v-else-if="startup.logo_url"
                     :src="startup.logo_url"
                     :alt="startup.name"
                     class="size-10 rounded-lg object-cover"
@@ -27,7 +40,7 @@ defineProps<{ startup: StartupCardData; showPrice?: boolean }>();
                 </span>
                 <div>
                     <div class="flex items-center gap-1 font-semibold leading-tight">
-                        {{ startup.name }}
+                        <span :class="startup.is_anonymous ? 'select-none blur-[4px]' : ''">{{ startup.name }}</span>
                         <BadgeCheck v-if="startup.is_verified" class="size-4 text-emerald-600" />
                     </div>
                     <p class="text-xs text-muted-foreground">{{ startup.category_label }} · {{ startup.country_label }}</p>
@@ -39,7 +52,8 @@ defineProps<{ startup: StartupCardData; showPrice?: boolean }>();
             >For sale</span>
         </div>
 
-        <p v-if="startup.tagline" class="mt-3 line-clamp-2 text-sm text-muted-foreground">{{ startup.tagline }}</p>
+        <p v-if="startup.is_anonymous" class="mt-3 text-sm text-muted-foreground">Identity hidden by the founder.</p>
+        <p v-else-if="startup.tagline" class="mt-3 line-clamp-2 text-sm text-muted-foreground">{{ startup.tagline }}</p>
 
         <div class="mt-4 flex items-end justify-between border-t border-border pt-4">
             <div>
@@ -65,5 +79,5 @@ defineProps<{ startup: StartupCardData; showPrice?: boolean }>();
                 </template>
             </div>
         </div>
-    </Link>
+    </component>
 </template>

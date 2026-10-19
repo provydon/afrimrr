@@ -34,8 +34,8 @@ class SitemapController extends Controller
         $add('/terms', '0.3');
         $add('/privacy', '0.3');
 
-        // Public startups + their founders.
-        Startup::public()->with('owner')->orderByDesc('mrr_usd')->get()
+        // Public startups + their founders (anonymous ones have no profile page).
+        Startup::public()->where('is_anonymous', false)->with('owner')->orderByDesc('mrr_usd')->get()
             ->each(function (Startup $s) use ($add) {
                 $add('/startups/'.$s->slug, '0.7', $s->updated_at?->toAtomString());
             });

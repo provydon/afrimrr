@@ -30,7 +30,7 @@ function sortBy(e: Event) {
         </div>
 
         <div v-if="props.listings.length" class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <StartupCard v-for="s in props.listings" :key="s.slug" :startup="s" :show-price="true" />
+            <StartupCard v-for="(s, i) in props.listings" :key="s.slug ?? `anon-${i}`" :startup="s" :show-price="true" />
         </div>
         <p v-else class="mt-12 rounded-xl border border-dashed border-border p-12 text-center text-muted-foreground">
             No startups are for sale right now. Own one? List it from your dashboard.
