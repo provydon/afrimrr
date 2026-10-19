@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Startup;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class StartupManagementTest extends TestCase
@@ -96,6 +97,43 @@ class StartupManagementTest extends TestCase
         $this->actingAs($intruder)->delete(route('startups.destroy', $startup))->assertForbidden();
 
         $this->assertDatabaseHas('startups', ['id' => $startup->id, 'name' => $startup->name]);
+    }
+
+    public function test_owner_can_view_the_edit_form_with_asking_price_in_dollars(): void
+    {
+        $user = User::factory()->create();
+        $startup = Startup::factory()->forSale(250_000_00)->create([
+            'user_id' => $user->id,
+            'name' => 'Editable',
+            'category' => 'saas',
+        ]);
+
+        $this->actingAs($user)->get(route('startups.edit', $startup))
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $p) => $p
+                ->component('startups/Edit')
+                ->where('startup.name', 'Editable')
+                ->where('startup.asking_price_usd', 250000) // cents -> dollars
+                ->where('startup.has_connections', false)
+                ->has('categories')
+                ->has('countries')
+                ->has('currencies'));
+    }
+
+    public function test_update_stores_asking_price_as_cents(): void
+    {
+        $user = User::factory()->create();
+        $startup = Startup::factory()->create(['user_id' => $user->id]);
+
+        $this->actingAs($user)->put(route('startups.update', $startup), [
+            'name' => 'Priced',
+            'category' => 'saas',
+            'country' => 'NG',
+            'is_for_sale' => true,
+            'asking_price_usd' => 1500, // dollars
+        ])->assertRedirect(route('dashboard'));
+
+        $this->assertSame(150_000, $startup->fresh()->asking_price_usd); // cents
     }
 
     public function test_owner_can_delete_their_startup(): void

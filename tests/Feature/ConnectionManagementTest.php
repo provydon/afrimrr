@@ -7,6 +7,7 @@ use App\Models\Startup;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class ConnectionManagementTest extends TestCase
@@ -100,6 +101,22 @@ class ConnectionManagementTest extends TestCase
             'provider' => 'paystack', 'secret' => 'sk_test_validkey_123',
         ])->assertForbidden();
         $this->actingAs($intruder)->post(route('startups.sync', $startup))->assertForbidden();
+    }
+
+    public function test_connections_page_lists_providers_and_existing_connections(): void
+    {
+        $user = User::factory()->create();
+        $startup = Startup::factory()->create(['user_id' => $user->id]);
+        Connection::factory()->provider('stripe')->active()->create(['startup_id' => $startup->id]);
+
+        $this->actingAs($user)->get(route('startups.connections', $startup))
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $p) => $p
+                ->component('startups/Connections')
+                ->where('startup.slug', $startup->slug)
+                ->has('providers', 3) // paystack, flutterwave, stripe
+                ->has('connections', 1)
+                ->where('connections.0.provider', 'stripe'));
     }
 
     public function test_sync_action_refreshes_mrr(): void

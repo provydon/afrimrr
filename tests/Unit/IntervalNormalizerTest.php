@@ -30,6 +30,7 @@ class IntervalNormalizerTest extends TestCase
 
     public function test_sub_monthly_intervals_annualize_from_days(): void
     {
+        $this->assertEqualsWithDelta(1 / (30.4 * 24), IntervalNormalizer::periodInMonths('hourly'), 1e-12);
         $this->assertEqualsWithDelta(1 / 30.4, IntervalNormalizer::periodInMonths('daily'), 1e-9);
         $this->assertEqualsWithDelta(7 / 30.4, IntervalNormalizer::periodInMonths('weekly'), 1e-9);
         $this->assertEqualsWithDelta(14 / 30.4, IntervalNormalizer::periodInMonths('biweekly'), 1e-9);

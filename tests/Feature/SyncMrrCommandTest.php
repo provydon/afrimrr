@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Actions\SyncStartup;
 use App\Jobs\SyncStartupMrr;
 use App\Models\Connection;
 use App\Models\Startup;
@@ -35,6 +36,30 @@ class SyncMrrCommandTest extends TestCase
 
         Queue::assertPushed(SyncStartupMrr::class, 1);
         Queue::assertPushed(fn (SyncStartupMrr $job) => $job->startupId === $withConn->id);
+    }
+
+    public function test_the_queued_job_syncs_the_startup(): void
+    {
+        Http::fake([
+            'api.paystack.co/subscription*' => Http::response([
+                'data' => [['status' => 'active', 'plan' => ['interval' => 'monthly', 'currency' => 'NGN', 'amount' => 500_000]]],
+                'meta' => ['pageCount' => 1],
+            ]),
+        ]);
+
+        $startup = Startup::factory()->create(['mrr_usd' => 0]);
+        Connection::factory()->provider('paystack')->create(['startup_id' => $startup->id]);
+
+        (new SyncStartupMrr($startup->id))->handle(app(SyncStartup::class));
+
+        $this->assertSame(315, $startup->fresh()->mrr_usd);
+    }
+
+    public function test_the_queued_job_is_a_no_op_for_a_missing_startup(): void
+    {
+        (new SyncStartupMrr(999_999))->handle(app(SyncStartup::class));
+
+        $this->expectNotToPerformAssertions();
     }
 
     public function test_now_flag_runs_the_sync_synchronously(): void
