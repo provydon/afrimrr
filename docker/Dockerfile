@@ -10,6 +10,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions
 
 RUN install-php-extensions \
     bcmath \
+    gd \
     intl \
     opcache \
     pcntl \

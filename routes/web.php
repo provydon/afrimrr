@@ -9,6 +9,7 @@ use App\Http\Controllers\Public\BadgeController;
 use App\Http\Controllers\Public\FounderProfileController;
 use App\Http\Controllers\Public\LeaderboardController;
 use App\Http\Controllers\Public\MarketplaceController;
+use App\Http\Controllers\Public\OgImageController;
 use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\SitemapController;
 use App\Http\Controllers\Public\StartupDirectoryController;
@@ -32,6 +33,10 @@ Route::get('/founders/{username}', [FounderProfileController::class, 'show'])->n
 Route::get('/badge/{startup}.svg', [BadgeController::class, 'svg'])
     ->where('startup', '[a-zA-Z0-9\-]+')
     ->name('badge.svg');
+
+Route::get('/og/startups/{startup}.png', [OgImageController::class, 'show'])
+    ->where('startup', '[a-zA-Z0-9\-]+')
+    ->name('og.startup');
 
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/about', [PageController::class, 'about'])->name('about');
