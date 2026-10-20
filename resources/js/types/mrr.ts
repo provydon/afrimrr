@@ -50,5 +50,6 @@ export interface StartupProfileData extends StartupCardData {
     active_subscriptions: number;
     last_synced_at: string | null;
     arr_usd_display: string;
+    arr_local_display: string;
     history: { date: string; mrr_usd: number }[];
 }

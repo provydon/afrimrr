@@ -69,6 +69,7 @@ class StartupPresenter
             'active_subscriptions' => $startup->active_subscriptions,
             'last_synced_at' => $startup->last_synced_at?->diffForHumans(),
             'arr_usd_display' => Money::usd($startup->mrr_usd * 12),
+            'arr_local_display' => Money::format($startup->mrr_local * 12, $startup->display_currency),
             'history' => $snapshots,
             'founder' => [
                 'name' => $startup->owner?->name,
