@@ -15,6 +15,7 @@ interface DashStartup {
     verification_source: string | null;
     mrr_usd_display: string;
     mrr_local_display: string;
+    display_currency: string;
     mom_growth: number | null;
     is_public: boolean;
     is_for_sale: boolean;
@@ -69,6 +70,7 @@ function destroy(slug: string, name: string) {
                     </div>
                     <div class="text-right">
                         <p class="text-xl font-bold">{{ s.mrr_usd_display }}</p>
+                        <p v-if="s.display_currency !== 'USD'" class="text-xs text-muted-foreground">{{ s.mrr_local_display }}</p>
                         <p v-if="s.mom_growth !== null" class="text-xs" :class="s.mom_growth >= 0 ? 'text-emerald-600' : 'text-red-500'">
                             {{ s.mom_growth >= 0 ? '+' : '' }}{{ s.mom_growth }}% MoM
                         </p>

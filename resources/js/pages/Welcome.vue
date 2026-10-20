@@ -116,7 +116,10 @@ const providers = ['Paystack', 'Flutterwave', 'Stripe'];
                     </div>
                     <p class="truncate text-xs text-muted-foreground">{{ s.category_label }} · {{ s.country_label }}</p>
                 </div>
-                <span class="font-bold">{{ s.mrr_usd_display }}</span>
+                <div class="text-right">
+                    <p class="font-bold">{{ s.mrr_usd_display }}</p>
+                    <p v-if="s.display_currency !== 'USD'" class="text-xs text-muted-foreground">{{ s.mrr_local_display }}</p>
+                </div>
             </component>
         </div>
         <p v-else class="mt-6 rounded-xl border border-dashed border-border p-10 text-center text-muted-foreground">

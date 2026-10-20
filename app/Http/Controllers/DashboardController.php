@@ -25,6 +25,7 @@ class DashboardController extends Controller
                 'verification_source' => $s->verification_source,
                 'mrr_usd_display' => Money::usd($s->mrr_usd),
                 'mrr_local_display' => Money::format($s->mrr_local, $s->display_currency),
+                'display_currency' => $s->display_currency,
                 'mom_growth' => $s->mom_growth,
                 'is_public' => $s->is_public,
                 'is_for_sale' => $s->is_for_sale,
