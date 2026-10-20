@@ -73,7 +73,7 @@ const medal = (rank: number) => (rank === 1 ? '🥇' : rank === 2 ? '🥈' : ran
                 </div>
                 <div class="text-right">
                     <p class="font-bold">{{ s.mrr_usd_display }}</p>
-                    <p v-if="s.display_currency !== 'USD'" class="text-xs text-muted-foreground">{{ s.mrr_local_display }}</p>
+                    <p v-if="s.display_currency !== 'USD'" class="text-xs font-semibold text-foreground">{{ s.mrr_local_display }}</p>
                 </div>
                 <div class="hidden text-right sm:block">
                     <span
