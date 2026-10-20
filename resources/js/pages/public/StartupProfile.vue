@@ -87,12 +87,12 @@ function copyEmbed() {
             <div class="rounded-xl border border-border bg-card p-4">
                 <p class="text-xs uppercase tracking-wide text-muted-foreground">MRR</p>
                 <p class="mt-1 text-2xl font-bold">{{ startup.mrr_usd_display }}</p>
-                <p v-if="startup.display_currency !== 'USD'" class="text-xs font-semibold text-foreground">{{ startup.mrr_local_display }}</p>
+                <p v-if="startup.display_currency !== 'USD'" class="text-sm text-muted-foreground">{{ startup.mrr_local_display }}</p>
             </div>
             <div class="rounded-xl border border-border bg-card p-4">
                 <p class="text-xs uppercase tracking-wide text-muted-foreground">ARR</p>
                 <p class="mt-1 text-2xl font-bold">{{ startup.arr_usd_display }}</p>
-                <p v-if="startup.display_currency !== 'USD'" class="text-xs font-semibold text-foreground">{{ startup.arr_local_display }}</p>
+                <p v-if="startup.display_currency !== 'USD'" class="text-sm text-muted-foreground">{{ startup.arr_local_display }}</p>
             </div>
             <div class="rounded-xl border border-border bg-card p-4">
                 <p class="text-xs uppercase tracking-wide text-muted-foreground">MoM growth</p>

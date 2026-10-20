@@ -59,7 +59,7 @@ const linkProps = computed(() => (props.startup.is_anonymous ? {} : { href: `/st
             <div>
                 <p class="text-[11px] uppercase tracking-wide text-muted-foreground">MRR</p>
                 <p class="text-xl font-bold">{{ startup.mrr_usd_display }}</p>
-                <p v-if="startup.display_currency !== 'USD'" class="text-xs font-semibold text-foreground">
+                <p v-if="startup.display_currency !== 'USD'" class="text-sm text-muted-foreground">
                     ≈ {{ startup.mrr_local_display }}
                 </p>
             </div>

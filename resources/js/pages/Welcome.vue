@@ -118,7 +118,7 @@ const providers = ['Paystack', 'Flutterwave', 'Stripe'];
                 </div>
                 <div class="text-right">
                     <p class="font-bold">{{ s.mrr_usd_display }}</p>
-                    <p v-if="s.display_currency !== 'USD'" class="text-xs font-semibold text-foreground">{{ s.mrr_local_display }}</p>
+                    <p v-if="s.display_currency !== 'USD'" class="text-sm text-muted-foreground">{{ s.mrr_local_display }}</p>
                 </div>
             </component>
         </div>

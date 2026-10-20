@@ -70,7 +70,7 @@ function destroy(slug: string, name: string) {
                     </div>
                     <div class="text-right">
                         <p class="text-xl font-bold">{{ s.mrr_usd_display }}</p>
-                        <p v-if="s.display_currency !== 'USD'" class="text-xs font-semibold text-foreground">{{ s.mrr_local_display }}</p>
+                        <p v-if="s.display_currency !== 'USD'" class="text-sm text-muted-foreground">{{ s.mrr_local_display }}</p>
                         <p v-if="s.mom_growth !== null" class="text-xs" :class="s.mom_growth >= 0 ? 'text-emerald-600' : 'text-red-500'">
                             {{ s.mom_growth >= 0 ? '+' : '' }}{{ s.mom_growth }}% MoM
                         </p>
