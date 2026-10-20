@@ -22,4 +22,9 @@ class SubscriberFactory extends Factory
             'source' => 'popup',
         ];
     }
+
+    public function unsubscribed(): static
+    {
+        return $this->state(fn () => ['unsubscribed_at' => now()]);
+    }
 }

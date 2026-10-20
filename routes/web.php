@@ -15,6 +15,7 @@ use App\Http\Controllers\Public\SitemapController;
 use App\Http\Controllers\Public\StartupDirectoryController;
 use App\Http\Controllers\Public\StartupProfileController;
 use App\Http\Controllers\Public\SubscriberController;
+use App\Http\Controllers\Public\UnsubscribeController;
 use App\Http\Controllers\StartupController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,9 @@ Route::get('/developers', [PageController::class, 'developers'])->name('develope
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe');
+Route::get('/unsubscribe/{subscriber}', UnsubscribeController::class)
+    ->where('subscriber', '[A-Za-z0-9]+')
+    ->name('newsletter.unsubscribe');
 
 // MCP (Model Context Protocol) server — JSON-RPC over HTTP. CSRF-exempt (see bootstrap/app.php).
 Route::post('/mcp', [McpController::class, 'handle'])->name('mcp');

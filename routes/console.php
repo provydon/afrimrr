@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // Refresh verified MRR from connected providers every hour.
 Schedule::command('mrr:sync')->hourly()->withoutOverlapping();
+
+// "Spot the Next Big Thing" weekly report — Mondays 09:00 UTC.
+Schedule::command('newsletter:send-weekly')->weeklyOn(1, '09:00')->withoutOverlapping();
