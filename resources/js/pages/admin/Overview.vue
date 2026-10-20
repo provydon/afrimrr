@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
-import { BadgeCheck, Mail, Store, Users } from '@lucide/vue';
+import type { Auth } from '@/types/auth';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { BadgeCheck, Mail, Send, Store, Users } from '@lucide/vue';
+import { computed } from 'vue';
 
 defineProps<{
     stats: {
@@ -14,6 +16,15 @@ defineProps<{
     recentSubscribers: { email: string; source: string | null; created_at: string | null }[];
     recentStartups: { name: string; mrr_usd_display: string; is_verified: boolean; owner: string | null; created_at: string | null }[];
 }>();
+
+const page = usePage<{ auth: Auth }>();
+const adminEmail = computed(() => page.props.auth?.user?.email ?? 'your inbox');
+
+const testForm = useForm({});
+
+function sendTest() {
+    testForm.post('/admin/newsletter/test', { preserveScroll: true });
+}
 </script>
 
 <template>
@@ -47,6 +58,24 @@ defineProps<{
                 <p class="text-sm text-muted-foreground">For sale</p>
                 <p class="mt-2 text-2xl font-bold tabular-nums">{{ stats.for_sale }}</p>
             </div>
+        </div>
+
+        <div class="mt-6 flex flex-col gap-3 rounded-xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="flex items-center gap-1.5 font-bold"><Send class="size-4 text-emerald-600" /> Weekly report</p>
+                <p class="mt-1 text-sm text-muted-foreground">
+                    Preview the real “Spot the Next Big Thing” email — sent to <span class="font-medium text-foreground">{{ adminEmail }}</span>.
+                </p>
+            </div>
+            <button
+                type="button"
+                :disabled="testForm.processing"
+                class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+                @click="sendTest"
+            >
+                <Send class="size-4" />
+                {{ testForm.processing ? 'Sending…' : 'Send me a test copy' }}
+            </button>
         </div>
 
         <div class="mt-8 grid gap-6 lg:grid-cols-2">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\NewsletterController;
 use App\Http\Controllers\Admin\OverviewController;
 use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\DashboardController;
@@ -89,6 +90,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 
     Route::get('/subscribers', [App\Http\Controllers\Admin\SubscriberController::class, 'index'])->name('subscribers');
     Route::get('/subscribers/export', [App\Http\Controllers\Admin\SubscriberController::class, 'export'])->name('subscribers.export');
+
+    Route::post('/newsletter/test', [NewsletterController::class, 'sendTest'])->name('newsletter.test');
 
     Route::get('/startups', [App\Http\Controllers\Admin\StartupController::class, 'index'])->name('startups');
     Route::put('/startups/{startup:id}', [App\Http\Controllers\Admin\StartupController::class, 'update'])->name('startups.update');
