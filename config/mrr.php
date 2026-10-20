@@ -33,13 +33,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | FX rates — USD per 1 major unit of each currency
+    | FX source + fallback rates — USD per 1 major unit of each currency
     |--------------------------------------------------------------------------
     |
-    | PLACEHOLDER rates (approx. Q4 2026). MRR is normalized to USD for ranking.
-    | Replace with a live FX feed (e.g. a daily cron hitting an FX API) in prod.
+    | Live rates are fetched from `fx_source` by `fx:refresh` (scheduled daily)
+    | and cached; `CurrencyConverter` prefers those. The table below is only a
+    | FALLBACK for before the first fetch, and also defines which currencies we
+    | fetch/rank in. `fx_source` must return {result:"success", rates:{CUR:per-USD}}.
     |
     */
+    'fx_source' => env('MRR_FX_SOURCE', 'https://open.er-api.com/v6/latest/USD'),
+
     'fx' => [
         'USD' => 1.0,
         'EUR' => 1.08,

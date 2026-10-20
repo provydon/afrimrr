@@ -52,6 +52,8 @@ else
     php artisan config:cache
     php artisan optimize
     php artisan storage:link || true
+    # Prime live FX rates so conversions use real rates from first boot (scheduler refreshes daily).
+    php artisan fx:refresh || true
     # Use PORT from environment (Render injects it; default 8000 elsewhere).
     : "${PORT:=8000}"
     export PORT

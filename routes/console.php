@@ -8,6 +8,9 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
+// Refresh live FX rates daily (before the first MRR sync of the day).
+Schedule::command('fx:refresh')->dailyAt('05:30')->withoutOverlapping();
+
 // Refresh verified MRR from connected providers every hour.
 Schedule::command('mrr:sync')->hourly()->withoutOverlapping();
 
