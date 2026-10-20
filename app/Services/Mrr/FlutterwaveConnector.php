@@ -3,6 +3,7 @@
 namespace App\Services\Mrr;
 
 use App\Services\Mrr\Contracts\ProviderConnector;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
@@ -13,72 +14,61 @@ class FlutterwaveConnector implements ProviderConnector
         return 'flutterwave';
     }
 
+    /**
+     * Sum successful transaction volume over the trailing 30 days from the v3
+     * /transactions endpoint (amounts in major units), paginating as needed.
+     */
     public function fetch(string $secret): MrrResult
     {
         $base = (string) config('mrr.providers.flutterwave.base');
-        $plans = $this->loadPlans($base, $secret);
+        $from = Carbon::now()->subDays(30)->toDateString();
+        $to = Carbon::now()->toDateString();
 
-        $result = new MrrResult;
+        /** @var array<string, int> $byCurrency */
+        $byCurrency = [];
+        $count = 0;
         $page = 1;
 
         do {
-            $body = $this->get($base.'/subscriptions', $secret, [
-                'status' => 'active',
+            $body = $this->get($base.'/transactions', $secret, [
+                'from' => $from,
+                'to' => $to,
+                'status' => 'successful',
                 'page' => $page,
             ]);
 
             $rows = $body['data'] ?? [];
 
-            foreach ($rows as $sub) {
-                if (strtolower((string) ($sub['status'] ?? '')) !== 'active') {
+            foreach ($rows as $tx) {
+                if (strtolower((string) ($tx['status'] ?? '')) !== 'successful') {
                     continue;
                 }
 
-                $planId = $sub['plan'] ?? null;
-                $plan = $planId !== null ? ($plans[$planId] ?? null) : null;
-
-                $interval = $plan['interval'] ?? 'monthly';
-                $currency = strtoupper($plan['currency'] ?? $sub['currency'] ?? 'NGN');
+                $currency = strtoupper((string) ($tx['currency'] ?? 'NGN'));
                 // Flutterwave reports amounts in major units.
-                $amountMajor = (float) ($plan['amount'] ?? $sub['amount'] ?? 0);
-                $amountMinor = (int) round($amountMajor * 100);
+                $amountMinor = (int) round(((float) ($tx['amount'] ?? 0)) * 100);
 
-                $monthlyMinor = IntervalNormalizer::toMonthlyMinor($amountMinor, $interval);
-                $usdCents = CurrencyConverter::toUsdCents($monthlyMinor, $currency);
+                if ($amountMinor <= 0) {
+                    continue;
+                }
 
-                $result->add($usdCents, $currency, $monthlyMinor);
+                $byCurrency[$currency] = ($byCurrency[$currency] ?? 0) + $amountMinor;
+                $count++;
             }
 
             $totalPages = (int) ($body['meta']['page_info']['total_pages'] ?? 1);
             $page++;
         } while ($page <= $totalPages && $rows !== []);
+
+        $result = new MrrResult;
+
+        foreach ($byCurrency as $currency => $minor) {
+            $result->add(CurrencyConverter::toUsdCents($minor, $currency), $currency, $minor, 0);
+        }
+
+        $result->activeSubscriptions = $count;
 
         return $result;
-    }
-
-    /**
-     * @return array<int|string, array<string, mixed>> keyed by plan id
-     */
-    private function loadPlans(string $base, string $secret): array
-    {
-        $plans = [];
-        $page = 1;
-
-        do {
-            $body = $this->get($base.'/payment-plans', $secret, ['page' => $page]);
-            $rows = $body['data'] ?? [];
-
-            foreach ($rows as $plan) {
-                if (isset($plan['id'])) {
-                    $plans[$plan['id']] = $plan;
-                }
-            }
-
-            $totalPages = (int) ($body['meta']['page_info']['total_pages'] ?? 1);
-            $page++;
-        } while ($page <= $totalPages && $rows !== []);
-
-        return $plans;
     }
 
     /**

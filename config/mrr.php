@@ -7,10 +7,10 @@ return [
     | Supported payment providers
     |--------------------------------------------------------------------------
     |
-    | Providers we can pull verified recurring-revenue data from. Paystack and
-    | Flutterwave expose native subscription/plan objects (amount + interval),
-    | Stripe does the same. Monnify has no native subscription product, so it is
-    | intentionally not here — recurring billing there is merchant-managed.
+    | Providers we pull verified revenue from. For each we sum successful
+    | transaction volume over the trailing 30 days (via their transactions /
+    | charges APIs) and normalize to monthly USD. Monnify is intentionally not
+    | here yet.
     |
     */
     'providers' => [
@@ -27,7 +27,7 @@ return [
         'stripe' => [
             'label' => 'Stripe',
             'base' => 'https://api.stripe.com/v1',
-            'key_hint' => 'Restricted key with read access to Subscriptions (rk_live_... / sk_live_...).',
+            'key_hint' => 'Restricted key with read access to Charges (rk_live_... / sk_live_...).',
         ],
     ],
 

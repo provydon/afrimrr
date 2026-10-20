@@ -41,9 +41,11 @@ class SyncMrrCommandTest extends TestCase
     public function test_the_queued_job_syncs_the_startup(): void
     {
         Http::fake([
-            'api.paystack.co/subscription*' => Http::response([
-                'data' => [['status' => 'active', 'plan' => ['interval' => 'monthly', 'currency' => 'NGN', 'amount' => 500_000]]],
-                'meta' => ['pageCount' => 1],
+            'api.paystack.co/transaction/totals*' => Http::response([
+                'data' => [
+                    'total_transactions' => 1,
+                    'total_volume_by_currency' => [['currency' => 'NGN', 'amount' => 500_000]],
+                ],
             ]),
         ]);
 
@@ -65,9 +67,11 @@ class SyncMrrCommandTest extends TestCase
     public function test_now_flag_runs_the_sync_synchronously(): void
     {
         Http::fake([
-            'api.paystack.co/subscription*' => Http::response([
-                'data' => [['status' => 'active', 'plan' => ['interval' => 'monthly', 'currency' => 'NGN', 'amount' => 500_000]]],
-                'meta' => ['pageCount' => 1],
+            'api.paystack.co/transaction/totals*' => Http::response([
+                'data' => [
+                    'total_transactions' => 1,
+                    'total_volume_by_currency' => [['currency' => 'NGN', 'amount' => 500_000]],
+                ],
             ]),
         ]);
 

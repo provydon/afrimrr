@@ -93,9 +93,9 @@ class OgImageController extends Controller
         [$mw] = $this->measure(116, $bold, $mrr);
         $this->text($img, 38, $pad + $mw + 24, $mrrY, $muted, $regular, '/mo');
 
-        // Footer line: country · active subscriptions · domain.
-        $subs = number_format($startup->active_subscriptions);
-        $footer = sprintf('%s   ·   %s active subs   ·   africanmrr.com', $startup->countryLabel(), $subs);
+        // Footer line: country · 30-day transactions · domain.
+        $txns = number_format($startup->active_subscriptions);
+        $footer = sprintf('%s   ·   %s txns (30d)   ·   africanmrr.com', $startup->countryLabel(), $txns);
         $this->text($img, 28, $pad, 575, $muted, $regular, $footer);
 
         ob_start();

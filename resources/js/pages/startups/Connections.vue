@@ -75,7 +75,7 @@ const activeHint = () => props.providers.find((p) => p.key === form.provider)?.k
         <!-- Add provider -->
         <div class="mt-8 rounded-xl border border-border bg-card p-5">
             <h2 class="font-semibold">Connect a payment provider</h2>
-            <p class="mt-1 text-sm text-muted-foreground">We read active subscriptions only. Use a read-only key where possible.</p>
+            <p class="mt-1 text-sm text-muted-foreground">We read your successful transactions from the last 30 days. Use a read-only key where possible.</p>
 
             <form class="mt-4 space-y-4" @submit.prevent="connect">
                 <div>

@@ -18,11 +18,12 @@ class SyncStartupTest extends TestCase
     private function fakePaystack(int $amountMinor = 500_000): void
     {
         Http::fake([
-            'api.paystack.co/subscription*' => Http::response([
+            'api.paystack.co/transaction/totals*' => Http::response([
                 'data' => [
-                    ['status' => 'active', 'plan' => ['interval' => 'monthly', 'currency' => 'NGN', 'amount' => $amountMinor]],
+                    'total_transactions' => 1,
+                    'total_volume' => $amountMinor,
+                    'total_volume_by_currency' => [['currency' => 'NGN', 'amount' => $amountMinor]],
                 ],
-                'meta' => ['pageCount' => 1],
             ]),
         ]);
     }
@@ -84,14 +85,16 @@ class SyncStartupTest extends TestCase
     public function test_multiple_providers_mark_source_as_multiple(): void
     {
         Http::fake([
-            'api.paystack.co/subscription*' => Http::response([
-                'data' => [['status' => 'active', 'plan' => ['interval' => 'monthly', 'currency' => 'NGN', 'amount' => 500_000]]],
-                'meta' => ['pageCount' => 1],
+            'api.paystack.co/transaction/totals*' => Http::response([
+                'data' => [
+                    'total_transactions' => 1,
+                    'total_volume_by_currency' => [['currency' => 'NGN', 'amount' => 500_000]],
+                ],
             ]),
-            'api.stripe.com/v1/subscriptions*' => Http::response([
-                'data' => [['id' => 'sub_1', 'items' => ['data' => [
-                    ['quantity' => 1, 'price' => ['unit_amount' => 1_000, 'currency' => 'usd', 'recurring' => ['interval' => 'month', 'interval_count' => 1]]],
-                ]]]],
+            'api.stripe.com/v1/charges*' => Http::response([
+                'data' => [
+                    ['id' => 'ch_1', 'status' => 'succeeded', 'paid' => true, 'amount' => 1_000, 'amount_refunded' => 0, 'currency' => 'usd'],
+                ],
                 'has_more' => false,
             ]),
         ]);

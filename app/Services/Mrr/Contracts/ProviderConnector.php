@@ -8,7 +8,8 @@ use App\Services\Mrr\MrrResult;
 interface ProviderConnector
 {
     /**
-     * Pull active subscriptions from the provider and return normalized MRR.
+     * Pull the trailing 30-day successful transaction volume from the provider
+     * and return it normalized to USD (the startup's monthly revenue figure).
      *
      * @throws ConnectorException
      */

@@ -3,12 +3,14 @@
 namespace App\Services\Mrr;
 
 /**
- * Normalized recurring-revenue snapshot pulled from a provider.
+ * Normalized monthly-revenue snapshot pulled from a provider: the trailing
+ * 30-day successful transaction volume, converted to USD.
  */
 class MrrResult
 {
     public function __construct(
         public int $usdCents = 0,
+        // Number of successful transactions counted in the 30-day window.
         public int $activeSubscriptions = 0,
         /** @var array<string, int> local minor units keyed by currency */
         public array $localByCurrency = [],

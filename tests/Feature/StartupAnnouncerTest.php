@@ -38,7 +38,7 @@ class StartupAnnouncerTest extends TestCase
         $text = $poster->posts[0];
         $this->assertStringContainsString('Kudi just joined AfricanMRR', $text);
         $this->assertStringContainsString('MRR: $144/mo', $text);
-        $this->assertStringContainsString('Active subs: 16', $text);
+        $this->assertStringContainsString('Transactions (30d): 16', $text);
         $this->assertStringContainsString('Nigeria', $text);
         $this->assertStringContainsString('/startups/'.$startup->slug, $text);
     }

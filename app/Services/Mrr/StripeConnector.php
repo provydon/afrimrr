@@ -3,6 +3,7 @@
 namespace App\Services\Mrr;
 
 use App\Services\Mrr\Contracts\ProviderConnector;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
@@ -13,14 +14,22 @@ class StripeConnector implements ProviderConnector
         return 'stripe';
     }
 
+    /**
+     * Sum net successful charge volume (amount captured minus refunds) over the
+     * trailing 30 days, paginating the /charges list via starting_after.
+     */
     public function fetch(string $secret): MrrResult
     {
         $base = (string) config('mrr.providers.stripe.base');
-        $result = new MrrResult;
+        $since = Carbon::now()->subDays(30)->timestamp;
+
+        /** @var array<string, int> $byCurrency */
+        $byCurrency = [];
+        $count = 0;
         $startingAfter = null;
 
         do {
-            $query = ['status' => 'active', 'limit' => 100];
+            $query = ['limit' => 100, 'created' => ['gte' => $since]];
 
             if ($startingAfter !== null) {
                 $query['starting_after'] = $startingAfter;
@@ -30,7 +39,7 @@ class StripeConnector implements ProviderConnector
                 $response = Http::withToken($secret)
                     ->acceptJson()
                     ->timeout(30)
-                    ->get($base.'/subscriptions', $query);
+                    ->get($base.'/charges', $query);
             } catch (Throwable $e) {
                 throw new ConnectorException('Could not reach Stripe: '.$e->getMessage());
             }
@@ -44,35 +53,36 @@ class StripeConnector implements ProviderConnector
             }
 
             $body = $response->json();
-            $subs = $body['data'] ?? [];
+            $charges = $body['data'] ?? [];
 
-            foreach ($subs as $sub) {
-                $items = $sub['items']['data'] ?? [];
-                $subs_added = false;
-
-                foreach ($items as $item) {
-                    $price = $item['price'] ?? [];
-                    $recurring = $price['recurring'] ?? [];
-
-                    $unitAmount = (int) ($price['unit_amount'] ?? 0);
-                    $quantity = (int) ($item['quantity'] ?? 1);
-                    $currency = strtoupper($price['currency'] ?? 'USD');
-                    $interval = $recurring['interval'] ?? 'month';
-                    $intervalCount = (int) ($recurring['interval_count'] ?? 1);
-
-                    $lineMinor = $unitAmount * max(1, $quantity);
-                    $monthlyMinor = IntervalNormalizer::toMonthlyMinor($lineMinor, $interval, $intervalCount);
-                    $usdCents = CurrencyConverter::toUsdCents($monthlyMinor, $currency);
-
-                    // Count the subscription once, not per line item.
-                    $result->add($usdCents, $currency, $monthlyMinor, $subs_added ? 0 : 1);
-                    $subs_added = true;
+            foreach ($charges as $charge) {
+                if (($charge['status'] ?? null) !== 'succeeded' || ! ($charge['paid'] ?? false)) {
+                    continue;
                 }
+
+                // Stripe amounts are in minor units; net out any refunds.
+                $net = (int) ($charge['amount'] ?? 0) - (int) ($charge['amount_refunded'] ?? 0);
+
+                if ($net <= 0) {
+                    continue;
+                }
+
+                $currency = strtoupper((string) ($charge['currency'] ?? 'USD'));
+                $byCurrency[$currency] = ($byCurrency[$currency] ?? 0) + $net;
+                $count++;
             }
 
             $hasMore = (bool) ($body['has_more'] ?? false);
-            $startingAfter = $subs !== [] ? end($subs)['id'] ?? null : null;
+            $startingAfter = $charges !== [] ? (end($charges)['id'] ?? null) : null;
         } while ($hasMore && $startingAfter !== null);
+
+        $result = new MrrResult;
+
+        foreach ($byCurrency as $currency => $minor) {
+            $result->add(CurrencyConverter::toUsdCents($minor, $currency), $currency, $minor, 0);
+        }
+
+        $result->activeSubscriptions = $count;
 
         return $result;
     }

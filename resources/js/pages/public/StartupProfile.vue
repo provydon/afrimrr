@@ -105,7 +105,7 @@ function copyEmbed() {
                 </p>
             </div>
             <div class="rounded-xl border border-border bg-card p-4">
-                <p class="text-xs uppercase tracking-wide text-muted-foreground">Active subs</p>
+                <p class="text-xs uppercase tracking-wide text-muted-foreground">Txns (30d)</p>
                 <p class="mt-1 text-2xl font-bold">{{ startup.active_subscriptions.toLocaleString() }}</p>
             </div>
         </div>

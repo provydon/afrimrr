@@ -55,13 +55,13 @@ class StartupAnnouncer
     {
         $url = route('startups.show', $startup->slug);
         $mrr = Money::usd($startup->mrr_usd);
-        $subs = number_format($startup->active_subscriptions);
+        $txns = number_format($startup->active_subscriptions);
 
         $lines = [
             "🚀 {$startup->name} just joined AfricanMRR",
             '',
             "🔁 MRR: {$mrr}/mo",
-            "💳 Active subs: {$subs}",
+            "🧾 Transactions (30d): {$txns}",
             "🌍 {$startup->countryLabel()}",
             '',
             $url,
