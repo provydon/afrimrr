@@ -50,7 +50,7 @@ services:
     repo: https://github.com/provydon/afrimrr
     branch: main
     region: frankfurt
-    plan: starter
+    plan: free             # cost reduction: free tier sleeps after ~15 min idle (cold start on next visit)
     dockerfilePath: ./docker/Dockerfile
     dockerContext: .
     healthCheckPath: /up
